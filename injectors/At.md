@@ -8,7 +8,6 @@ More-or-less irrelevant attributes of the annotation will not be documented here
 
 ```java
 @At(
-    // Must always be specified.
     value = "INJECTION_POINT",
     /*
     A "specifier" can be added to an injection point to tweak its targeting:

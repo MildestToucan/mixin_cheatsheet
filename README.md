@@ -1,4 +1,4 @@
-# GauntRecluse's Mixin Cheatsheet
+# GauntRecluse's Mixin Cheatsheet (HEAVILY WIP)
 
 ## Target Audience
 
@@ -47,23 +47,3 @@ To find help channels the following pages link to the official Discord servers o
 - [Fabric](https://fabricmc.net/discuss/)
 - [NeoForge](https://neoforged.net)
 - [SpongePowered](https://spongepowered.org/%5DSponge)
-
-## License
-
-This repository's content is licensed under the CC by 4.0 license.
-
-See the [license file](LICENSE.txt) for the text, and the [creative commons deed](https://creativecommons.org/licenses/by/4.0/deed.en) for an official summary about terms.
-
-TLDR; if you want to redistribute, remix, or fork this repository, under any license,
-all you have to do is credit `GauntRecluse & Contributors` or similar as having created it, and link to the license.
-
-Though, full disclosure, I am unlikely to enforce license terms much unless
-someone tries to claim credit for things me or contributors wrote.
-
-## Contributing
-
-This repo accepts contributions from anyone, but I reserve the right to merge or close any PRs at my discretion.
-
-This repo's contents are licensed under the [CC by 4.0](https://creativecommons.org/licenses/by/4.0/deed.en) license
-contributions will fall under the same license.
-Contributors are entitled to being credited in the file they contributed to.
