@@ -37,3 +37,60 @@ With most injection points, the call will be injected before the specified instr
 
 The handler's injected call is also accompanied by the instantiation of the `CallbackInfo` or `CallbackInfoReturnable` object
 that it will be passed as a parameter. If cancellable, the inject's call is followed by a conditional early return.
+
+### Example
+
+To inject a call at the top of the following method, and optionally return early:
+
+```java
+public class Target {
+    public int foo(int x, int y, int z) {
+        x += (y * z);
+        return z + x;
+    }
+}
+```
+
+You may do an inject like:
+
+```java
+@Inject(method = "foo", at = @At("HEAD"), cancellable = true)
+private void cancelFooIfZGreater(int x, int y, int z, CallbackInfoReturnable<Integer> cir) {
+    if (z > y && z > x) {
+        cir.setReturnValue(30);
+    }
+}
+```
+
+The resulting decompiled bytecode in the target method might look something like:
+
+```diff
+public class Target {
+    public int foo(int x, int y, int z) {
++       CallbackInfoReturnable callbackInfo4 = new CallbackInfoReturnable("foo", true);
++       this.handler$zza000$modid$cancelIfZGreater(x, y, z, callbackInfo4);
++       if (callbackInfo4.isCancelled()) {
++           return callbackInfo4.getReturnValueI();
++       }
+        x += y * z;
+        return z + x;
+    }
+
++   @MixinMerged(
++   mixin = "io.github.mildesttoucan.mixin.ExampleMixin",
++   priority = 1000,
++   sessionId = "0826c6c7-f4b2-4979-8192-f6913af13e3f"
++   )
++   private void handler$zza000$modid$cancelIfZGreater(int x, int y, int z, CallbackInfoReturnable cir) {
++       if (z > y && z > x) {
++           cir.setReturnValue(30);
++       }
++   }
+
+}
+```
+
+The main thing to keep in mind as a user of Mixin is that the callbackInfo, if cancellable, will add an early return when the handler cancels it.
+
+Another thing to note on the technical side is that since the target method returns a primitive `int`, `CallbackInfoReturnable` calls `getReturnValueI()` to avoid
+dealing with `Integer` boxing. If the method returned `Integer`, it'd instead return something closer to `return (Integer) callbackInfo4.getReturnValue();`
