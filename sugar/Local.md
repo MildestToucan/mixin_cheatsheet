@@ -2,6 +2,9 @@
 
 This does not cover the usage of `@Local` in the context of Expression `@Definition`s, but as a sugar parameter.
 
+`@Local` is the primary way of capturing local variables from a target method in an injector's handler, they should be used only if necessary,
+as capturing locals can often be brittle.
+
 ## External Resources
 
 [Official Wiki Page](https://github.com/LlamaLad7/MixinExtras/wiki/Local) (Read that if you're not already familiar!!!!!!!!!)
@@ -103,6 +106,8 @@ public void foo(int i, int j) {
 
 The local variable is passed to a generated `LocalDoubleRefImpl` which is then used by our handler.
 
+There was no need to specify the targeted local, because only one local in the target method matches the type of the annotated parameter.
+
 Once our handler's callback is over, the local's value is passed back to the original variable.
 
 ### Mutable Reference
@@ -121,3 +126,27 @@ private void wrapBar(int i, Operation<Void> original, @Local LocalDoubleRef ding
 
 The only difference in how it affects the target method is that the generated `LocalDoubleRefImpl` doesn't need to be casted
 to `double` to be passed to our handler.
+
+### Targeting one of multiple
+
+In the event there was more than one `double` local variable, we would have to further specify the `@Local` annotation's attributes.
+
+If we are **NOT** targeting and obfuscated environment, we could have used `@Local(name = "ding")`. Otherwise, we would've likely needed to use
+an `ordinal` depending on the order of the `double` locals available at the injection site.
+
+## Usage Concerns
+
+### Brittleness
+
+`@Local` is brittle outside of `name` targeting, and it should be used sparingly, and avoided when possible. Sometimes, injectors like `@WrapOperation` could give access to the
+values passed to a method call, or wrap a comparison between two objects and pass those two objects to the handler. It is preferred to capture the values by context like that
+rather than using `@Local`.
+
+Using `@Local` to capture individual target method arguments via `@Local(argsOnly = true)` is also not nearly as brittle, but most injectors provide a way for handlers to receive target method
+arguments already without local capture.
+
+### Accessibility
+
+Sometimes, the local you want to capture will no longer be available at the point you're targeting in the target method's bytecode, which will make it unavailable via `@Local`. In those
+situations, it may be possible to use an injector wrapping the local's latest value and using `@Share` to pass it to the injector that needs its value, but this does make less guarantees
+about the local's value than being able to reference it with `@Local`.
