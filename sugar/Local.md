@@ -138,9 +138,12 @@ an `ordinal` depending on the order of the `double` locals available at the inje
 
 ### Brittleness
 
-`@Local` is brittle outside of `name` targeting, and it should be used sparingly, and avoided when possible. Sometimes, injectors like `@WrapOperation` could give access to the
-values passed to a method call, or wrap a comparison between two objects and pass those two objects to the handler. It is preferred to capture the values by context like that
-rather than using `@Local`.
+`@Local` is brittle outside of `name` targeting, and it should be used sparingly, and avoided when possible.
+When possible, it is instead preferred to use an injector that might provide the context you need from the target directly.
+
+For example, if you need to inject after or before a method call `bar(i);` and want access to the local passed as an argument, instead of using `@Inject` and `@Local`,
+you could wrap it with `@WrapOperation` and get passed the arguments from the target. Note this also makes the value you're passed affected by
+potential modifications that may not affect the local variable's value across the targeted method, such as a `@ModifyArg`.
 
 Using `@Local` to capture individual target method arguments via `@Local(argsOnly = true)` is also not nearly as brittle, but most injectors provide a way for handlers to receive target method
 arguments already without local capture.
