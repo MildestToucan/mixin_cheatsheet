@@ -67,10 +67,8 @@ After the handler method, the targeted local variable will have its value set to
 
 ```java
 public void foo(int i, int j) {
-    /* ... */
     double ding = someComplexOperation(i, j);
     bar(i);
-    /* ... */
 }
 ```
 
@@ -87,18 +85,19 @@ private void wrapBar(int i, Operation<Void> original, @Local double ding) {
 
 Which would produce the result:
 
-```java
+```diff
 public void foo(int i, int j) {
     double ding = someComplexOperation(i, j);
-    Operation var10002 = var0 -> {
-        WrapOperationRuntime.checkArgumentCount(var0, 1, "[int]");
-        bar((Integer)var0[0]);
-        return (Void)null;
-    };
-    LocalDoubleRefImpl ref6 = new LocalDoubleRefImpl();
-    ref6.init(ding);
-    this.wrapOperation$zza000$test_env$wrapBar$mixinextras$bridge$5(i, var10002, (double)ref6);
-    ding = ref6.dispose();
+-   bar(i);
++   Operation var10002 = var0 -> {
++       WrapOperationRuntime.checkArgumentCount(var0, 1, "[int]");
++       bar((Integer)var0[0]);
++       return (Void)null;
++   };
++   LocalDoubleRefImpl ref6 = new LocalDoubleRefImpl();
++   ref6.init(ding);
++   this.wrapOperation$zza000$test_env$wrapBar$mixinextras$bridge$5(i, var10002, (double)ref6);
++   ding = ref6.dispose();
 }
 ```
 
