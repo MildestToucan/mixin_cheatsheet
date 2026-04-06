@@ -119,5 +119,5 @@ private void wrapBar(int i, Operation<Void> original, @Local LocalDoubleRef ding
 }
 ```
 
-The only reference in how it affects the target method is that the generated `LocalDoubleRefImpl` doesn't need to be casted
+The only difference in how it affects the target method is that the generated `LocalDoubleRefImpl` doesn't need to be casted
 to `double` to be passed to our handler.
