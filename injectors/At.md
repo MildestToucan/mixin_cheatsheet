@@ -16,6 +16,8 @@ More-or-less irrelevant attributes of the annotation will not be documented here
 
 ```java
 @At(
+    // An injection point is essentially a search algorithm to use as the base for,
+    // finding targets in the targeted method. One must always be specified.
     value = "INJECTION_POINT",
     /*
     A "specifier" can be added to an injection point to tweak its targeting:
@@ -37,7 +39,7 @@ More-or-less irrelevant attributes of the annotation will not be documented here
 
     // Used by CONSTANT to specify the constant values to look for.
     // Takes Strings formatted as "key=value". Could also be used by a custom point for custom args.
-    args = /* Additional injection point arguments */
+    args = /* String or array of strings, unused by default */
 
     // Used to "shift" the targeted instruction.
     // Only really useful to target the instruction after the returned target, as
@@ -47,15 +49,8 @@ More-or-less irrelevant attributes of the annotation will not be documented here
     // Used specify the ordinal of the instruction to target amidst the matches.
     // 0 would be the first match, 5 the sixth match, etc.
     // Ordinals above 0 are brittle. Use slices and expressions instead if possible.
-    ordinal = /* Some int value */,
+    ordinal = /* Some int value, unused by default */,
 
-    // Used to specify the maximum number of matches for the injector.
-    // No limit is set by default.
-    allow = /* Some int value */,
-
-    // Used to specify the minimum number of matches for the injector.
-    // The default is set in the Mixin config under injectors {defaultRequire}
-    require = /* Some int value */
 )
 ```
 

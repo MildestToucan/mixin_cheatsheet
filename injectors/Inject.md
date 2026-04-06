@@ -12,9 +12,36 @@
 
 ```java
 @Inject(
-    method = "targetMethod",
+    // The target method(s) by name, appended with the descriptor if an overload must be specified.
+    method = /* A string or array of strings */,
+    
     at = @At(/* See the dedicated @At page. */),
-    cancellable = /* Set this to true if you need to cancel. */
+    
+    // Whether this injector's handler needs to be able to cancel.
+    // Set this to true if you need to use cancel() or setReturnValue(R)
+    cancellable = /* Boolean, defaults to false */
+
+    // This injector supports slicing. Defaults to having no slices.
+    slice = @Slice(/* ... */)
+
+    // Used to specify the maximum number of matches for the injector.
+    allow = /* int value, no default limit */,
+
+    // Used to specify the minimum number of matches for the injector.
+    // The default is set in the Mixin config under injectors {defaultRequire}
+    require = /* int value, most often 1 by default */
+
+    // Whether to remap this annotation and its subannotations' strings to get past
+    // obfuscation. Set this to false if you inject into unobfuscated targets. Leave it
+    // to its default for mixing into Minecraft.
+    remap = /* boolean value, defaults to true in most cases */
+
+    // An injector-specific priority. In most cases, the mixin class's priority
+    // is sufficient to relate to other mixin classes' application order.
+    // Set this lower if you need this to apply earlier than other injectors in the class,
+    // or higher if you need it to apply later than other injectors in the class.
+    order = /* Int value, 1000 by default */
+
 )
 // The handler method should return void.
 private void handlerMethod(
