@@ -14,6 +14,7 @@ The content is greatly incomplete. Please take anything you see in this repo wit
 
 - [`@Local`](sugar/Local.md)
 - [`@Share`](sugar/Share.md)
+- [`@Cancellable`](sugar/Cancellable.md)
 
 ## Target Audience
 

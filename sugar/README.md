@@ -12,3 +12,4 @@ In that sense it extends a bit beyond purely syntactic sugar, as it gives more o
 
 - [@Local](/sugar/Local.md)
 - [@Share](/sugar/Share.md)
+- [@Cancellable](/sugar/Cancellable.md)
