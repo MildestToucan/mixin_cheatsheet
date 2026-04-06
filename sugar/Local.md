@@ -1,5 +1,9 @@
 # @Local
 
+<- [Back to Main](/README.md)
+
+<- [Back to Sugar](/sugar/README.md)
+
 This does not cover the usage of `@Local` in the context of Expression `@Definition`s, but as a sugar parameter.
 
 `@Local` is the primary way of capturing local variables from a target method in an injector's handler, they should be used only if necessary,
@@ -7,11 +11,9 @@ as capturing locals can often be brittle.
 
 ## External Resources
 
-[Official Wiki Page](https://github.com/LlamaLad7/MixinExtras/wiki/Local) (Read that if you're not already familiar!!!!!!!!!)
+[Official Wiki Page](https://github.com/LlamaLad7/MixinExtras/wiki/Local)
 
 ## Syntax
-
-### Annotation
 
 ```java
 @Local(
@@ -45,7 +47,7 @@ as capturing locals can often be brittle.
 
 The type of the annotated parameter should match the target local's type unless a mutable reference is needed.
 
-### Mutable References
+### Mutable Reference Typing
 
 If the targeted local needs to be mutated, using the `LocalRef` equivalent is necessary:
 

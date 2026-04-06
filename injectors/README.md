@@ -1,5 +1,7 @@
 # Injectors
 
+<- [Back to Main](/README.md)
+
 Injectors are the primary tool used in Mixin and MixinExtras to make changes to target methods. They add new information
 to the target method, or modify existing instructions in ways that conserve the original, such that they can chain on one another.
 
