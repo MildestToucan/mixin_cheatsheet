@@ -1,7 +1,5 @@
 # Injection Points
 
-See the [injection point reference](https://github.com/SpongePowered/Mixin/wiki/Injection-Point-Reference)
-
 As noted in the [@At](At.md) page, an injection point is used as the search algorithm to find targets
 to modify using an injector. This page will omit injection points that aren't relevant to writing modern mixins.
 
@@ -14,6 +12,12 @@ the entire method or the instructions contained in the relevant slices.
 When an injection point returns all matching a criteria, it is implicit that other tools like ordinals and specifiers
 can be used to pick a specific instruction. Ordinals and specifiers are always applied *after* the point-specific filters like
 `INVOKE`, `NEW` or `FIELD`'s `target`.
+
+## External Resources
+
+[Injection point reference](https://github.com/SpongePowered/Mixin/wiki/Injection-Point-Reference)
+
+[MixinExtras Expression wiki page](https://github.com/LlamaLad7/MixinExtras/wiki/Expressions)
 
 ## HEAD
 
