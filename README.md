@@ -1,5 +1,19 @@
 # GauntRecluse's Mixin Cheatsheet (HEAVILY WIP)
 
+## Table of Contents
+
+The content is greatly incomplete. Please take anything you see in this repo with a grain of salt.
+
+### [Injectors](injectors/README.md)
+
+- [`@At`](injectors/At.md)
+- [Injection Points](injectors/InjectionPoints.md)
+- [`@Inject`](injectors/Inject.md)
+
+### [Sugar](sugar/README.md)
+
+- [@Local](sugar/Local.md)
+
 ## Target Audience
 
 ***THIS IS NOT FOR BEGINNERS WHO ARE STILL LEARNING HOW TO USE MIXINS AND WHAT THEY ARE.***
