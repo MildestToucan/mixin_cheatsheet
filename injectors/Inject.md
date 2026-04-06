@@ -1,12 +1,16 @@
 # @Inject
 
+## External Resources
+
+[JavaDocs](https://jenkins.liteloader.com/job/Mixin/javadoc/org/spongepowered/asm/mixin/injection/Inject.html)
+
 ## Syntax
 
 ```java
 @Inject(
     method = "targetMethod",
     at = @At(/* See the dedicated @At page. */),
-    cancellable = /* whether you cancel the target method. Default false. */
+    cancellable = /* Set this to true if you need to cancel. */
 )
 // The handler method should return void.
 private void handlerMethod(
@@ -26,7 +30,16 @@ private void handlerMethod(
     
     /* == Getting the return value == */
     // When injecting at RETURN or TAIL you can:
-    TargetMethodReturnType return = cir.getReturnValue();
+    TargetMethodReturnType returnValue = cir.getReturnValue();
+    // If the return value is a primitive, you can also use the appropriate specialized variant.
+    // The variant is of the same name, but with the descriptor character of the primitive appended:
+    byte returnB = cir.getReturnValueB();
+    char returnC = cir.getReturnValueC();
+    double returnD = cir.getReturnValueD();
+    int returnI = cir.getReturnValueI();
+    long returnJ = cir.getReturnValueJ();
+    short getValueS = cir.getReturnValueS();
+    boolean getValueZ = cir.getReturnValueZ();
 }
 ```
 
@@ -37,6 +50,17 @@ With most injection points, the call will be injected before the specified instr
 
 The handler's injected call is also accompanied by the instantiation of the `CallbackInfo` or `CallbackInfoReturnable` object
 that it will be passed as a parameter. If cancellable, the inject's call is followed by a conditional early return.
+
+### Usage Concerns
+
+`@Inject` is often overused when it is not fitting, leading to more brittle or less compatible injectors. Keep in mind
+that cancelling in an inject does not chain, and should almost never be done unconditionally.
+
+For modifying an existing return value, prefer `@ModifyReturnValue` or `@WrapMethod`, or an injector that modifies the
+value in the return statement more directly.
+
+`@Inject` is best-suited for adding new operations to a target method, and should only be used if it specifically fits your
+purposes, rather than just because it fits your goals.
 
 ### Example
 
@@ -94,3 +118,62 @@ The main thing to keep in mind as a user of Mixin is that the callbackInfo, if c
 
 Another thing to note on the technical side is that since the target method returns a primitive `int`, `CallbackInfoReturnable` calls `getReturnValueI()` to avoid
 dealing with `Integer` boxing. If the method returned `Integer`, it'd instead return something closer to `return (Integer) callbackInfo4.getReturnValue();`
+
+## Niche Knowledge & Edge Cases
+
+### Non-void Inject Handlers
+
+For all intents and purporses, `@Inject` handlers shouldn't return a value, as that is the documented, expected, and standard behavior.
+However, it's technically possible to use it to modify the return value in a way that is compatible, somewhat similarly to `@ModifyReturnValue`.
+
+This is absolutely not a recommended thing to do, it is not convenient, not well-documented, and it is uncertain how well it works/will keep working across
+Mixin versions.
+
+To do so, instead of a cancellable inject, we target `RETURN` or `TAIL`, and return a value matching the target method's type. For example:
+
+For the target method:
+
+```java
+public boolean foo(int x, int y, int z) {
+    if ((x + y) == z) {
+        return true;
+    }
+    return y == z;
+}
+```
+
+And the inject:
+
+```java
+@Inject(method = "foo", at = @At("RETURN"))
+private boolean changeFooReturns(int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
+    return cir.getReturnValueZ() || x == y;
+}
+```
+
+In the decompiled source, we'd get:
+
+```java
+public boolean foo(int x, int y, int z) {
+    if (x + y == z) {
+        CallbackInfoReturnable callbackInfo4 = true;
+        CallbackInfoReturnable var6 = new CallbackInfoReturnable("foo", false, callbackInfo4);
+        return this.handler$zza000$test_env$changeFooReturns(x, y, z, var6);
+    } else {
+        CallbackInfoReturnable callbackInfo5 = y == z;
+        CallbackInfoReturnable var7 = new CallbackInfoReturnable("foo", false, callbackInfo5);
+        return this.handler$zza000$test_env$changeFooReturns(x, y, z, var7);
+    }
+}
+```
+
+You'll notice the very odd local variables of the type `CallbackInfoReturnable` being assigned to boolean values. How jank and fascinating this is.
+Why this is happening in that way, I'm not sure.
+
+Now, let's see how it reacts with a second inject doing a similar operation:
+
+```java
+@Inject(method = "foo", at = @At("RETURN"))
+private boolean anotherChangeFooReturns(int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
+    return cir.getReturnValueZ() || z == x;
+}
