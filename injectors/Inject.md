@@ -174,10 +174,12 @@ public boolean foo(int x, int y, int z) {
 You'll notice the very odd local variables of the type `CallbackInfoReturnable` being assigned to boolean values. How jank and fascinating this is.
 Why this is happening in that way, I'm not sure.
 
-Now, let's see how it reacts with a second inject doing a similar operation:
+### Legacy local capture
 
-```java
-@Inject(method = "foo", at = @At("RETURN"))
-private boolean anotherChangeFooReturns(int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
-    return cir.getReturnValueZ() || z == x;
-}
+Local capture using this feature is not recommended, use [`@Local`](/sugar/Local.md) instead.
+
+`@Inject` also has a `localCapture` attribute. It allows you to append parameters matching the target method's LVT
+to the handler's signature after the callbackinfo parameter, excluding the target method parameters. It's possible to
+omit any locals that are later in the LVT than the ones you need.
+
+The feature makes the assumption the target method parameters are prior to the callbackinfo.
