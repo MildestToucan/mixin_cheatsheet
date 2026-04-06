@@ -64,7 +64,13 @@ The appropriate `LocalRef` is as follows:
 | `short`     | `localShortRef`        |
 | `boolean`   | `LocalBooleanRef`      |
 
-The `LocalRef` object will wrap its value and expose it with a getter and setter methods.
+`LocalRef` types are implemented at runtime with a generated implementing class depending on the type and usage needed. They should not be stored, as
+they are only guaranteed to remain available until the end of the handler method they're passed to. Custom implementations are also discouraged.
+
+Object typed as `LocalRef`s must specify a concrete type.
+
+`LocalRef` types are also used for [@Share](/sugar/Share.md) parameters, in which case the same reference is passed between all the handlers with a `@Share` annotation id and
+type matching the shared reference.
 
 After the handler method, the targeted local variable will have its value set to the `LocalRef`'s wrapped value.
 

@@ -12,7 +12,8 @@ The content is greatly incomplete. Please take anything you see in this repo wit
 
 ### [Sugar](sugar/README.md)
 
-- [@Local](sugar/Local.md)
+- [`@Local`](sugar/Local.md)
+- [`@Share`](sugar/Share.md)
 
 ## Target Audience
 
