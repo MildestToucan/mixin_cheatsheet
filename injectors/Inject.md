@@ -1,5 +1,9 @@
 # @Inject
 
+<- [Back to Main](/README.md)
+
+<- [Back to Injectors](/injectors/README.md)
+
 ## External Resources
 
 [JavaDocs](https://jenkins.liteloader.com/job/Mixin/javadoc/org/spongepowered/asm/mixin/injection/Inject.html)
